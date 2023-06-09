@@ -35,7 +35,7 @@
 
 构建：`docker build -t fake-mysql-server .`
 
-启动：`docker run -p 3306:3306 fake-mysql-server -d`
+启动：`docker run -p 3306:3306 -d fake-mysql-server`
 
 ![](img/003.png)
 

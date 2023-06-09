@@ -33,7 +33,7 @@ Launch: `java -jar fake-mysql-cli.jar -p [port]`
 
 Build: `docker build -t fake-mysql-server .`
 
-Launch: `docker run -p 3306:3306 fake-mysql-server -d`
+Launch: `docker run -p 3306:3306 -d fake-mysql-server`
 
 ![](../img/003.png)
 
