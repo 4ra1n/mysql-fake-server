@@ -1,6 +1,6 @@
 package me.n1ar4.fake.cli;
 
-import me.n1ar4.fake.gui.Constant;
+import me.n1ar4.fake.proto.Version;
 
 public class PrintUtil {
     public static void print(){
@@ -10,6 +10,6 @@ public class PrintUtil {
                 "　　　　|　＼〈\n　　>? ?_　 ィ　 │ ／／\n　 / へ　　 /　?＜| ＼＼"+
                 "\n　 ヽ_?　　(_／　 │／／\n　　7　　　　　　　|／\n　　＞―r￣￣~∠--|");
         System.out.println("\u001B[32;1m Fake MySQL Server Cli \u001B[0m");
-        System.out.println("\u001B[32;1m Version: "+ Constant.version+" \u001B[0m");
+        System.out.println("\u001B[32;1m Version: "+ Version.version+" \u001B[0m");
     }
 }

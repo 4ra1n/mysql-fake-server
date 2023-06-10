@@ -8,6 +8,7 @@ import me.n1ar4.fake.gui.util.StringUtil;
 import me.n1ar4.fake.gui.util.TipUtil;
 import me.n1ar4.fake.log.LogUtil;
 import me.n1ar4.fake.proto.MySQLServer;
+import me.n1ar4.fake.proto.Version;
 import okhttp3.*;
 
 import javax.imageio.ImageIO;
@@ -101,7 +102,7 @@ public class FakeServer {
             bugItem.addActionListener(e -> {
                 try {
                     Desktop desktop = Desktop.getDesktop();
-                    URI oURL = new URI("https://github.com/4ra1n/");
+                    URI oURL = new URI("https://github.com/4ra1n/mysql-fake-server/issues");
                     desktop.browse(oURL);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -119,31 +120,12 @@ public class FakeServer {
             authorItem.addActionListener(e -> {
                 try {
                     Desktop desktop = Desktop.getDesktop();
-                    URI oURL = new URI("https://github.com/4ra1n/4ra1n");
+                    URI oURL = new URI("https://github.com/4ra1n/mysql-fake-server");
                     desktop.browse(oURL);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             });
-
-            JMenuItem normalItem = new JMenuItem("Issue");
-            is = FakeServer.class.getClassLoader().getResourceAsStream("normal.png");
-            if (is == null) {
-                return null;
-            }
-            imageIcon = new ImageIcon(ImageIO.read(is));
-            normalItem.setIcon(imageIcon);
-            aboutMenu.add(normalItem);
-            normalItem.addActionListener(e -> {
-                try {
-                    Desktop desktop = Desktop.getDesktop();
-                    URI oURL = new URI("https://github.com/4ra1n");
-                    desktop.browse(oURL);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-
             return aboutMenu;
         } catch (Exception ex) {
             return null;
@@ -153,7 +135,7 @@ public class FakeServer {
     private static JMenu createVersionMenu() {
         try {
             JMenu verMenu = new JMenu("Version");
-            JMenuItem jarItem = new JMenuItem("Current Version: " + Constant.version);
+            JMenuItem jarItem = new JMenuItem("Current Version: " + Version.version);
             InputStream is = FakeServer.class.getClassLoader().getResourceAsStream("ver.png");
             if (is == null) {
                 return null;
@@ -166,7 +148,7 @@ public class FakeServer {
             downItem.addActionListener(e -> {
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
-                        .url("https://api.github.com/repos/4ra1n/jar-analyzer/releases/latest")
+                        .url("https://api.github.com/repos/4ra1n/mysql-fake-server/releases/latest")
                         .addHeader("Connection", "close")
                         .build();
                 client.newCall(request).enqueue(new Callback() {
@@ -189,7 +171,7 @@ public class FakeServer {
 
                             String output;
                             output = String.format("%s: %s\n%s: %s",
-                                    "Your Version", Constant.version,
+                                    "Your Version", Version.version,
                                     "Latest Version", ver);
                             TipUtil.info(output);
                         } catch (Exception ex) {
@@ -355,6 +337,49 @@ public class FakeServer {
             clipboard.setContents(selection, null);
             TipUtil.info("copied!");
         });
+        new Thread(() -> {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("https://api.github.com/repos/4ra1n/mysql-fake-server/releases/latest")
+                    .addHeader("Connection", "close")
+                    .build();
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                @SuppressWarnings("all")
+                public void onFailure(Call call, IOException e) {
+                    // ignored
+                }
+
+                @Override
+                @SuppressWarnings("all")
+                public void onResponse(Call call, Response response) {
+                    try {
+                        if (response.body() == null) {
+                            return;
+                        }
+                        String body = response.body().string();
+                        String ver = body.split("\"tag_name\":")[1].split(",")[0];
+                        ver = ver.substring(1, ver.length() - 1);
+
+                        if (!ver.equals(Version.version)) {
+                            String output;
+                                output = String.format("New Version!\n%s: %s\n%s: %s\n%s",
+                                        "Your Current Version", Version.version,
+                                        "Latest Version", ver,
+                                        "https://github.com/4ra1n/mysql-fake-server/releases/latest");
+                                JOptionPane.showMessageDialog(masterPanel, output);
+                        }
+                    } catch (Exception ignored) {
+                    }
+                }
+            });
+        }).start();
     }
 
     {
@@ -397,19 +422,26 @@ public class FakeServer {
         useLocalButton.setText("USE 0.0.0.0");
         lefPanel.add(useLocalButton, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         rightPanel = new JPanel();
-        rightPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        rightPanel.setLayout(new GridLayoutManager(2, 4, new Insets(0, 0, 0, 0), -1, -1));
         rightPanel.setBackground(new Color(-1120293));
         masterPanel.add(rightPanel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         rightPanel.setBorder(BorderFactory.createTitledBorder(null, "Operation Panel", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-        startServerButton = new JButton();
-        startServerButton.setText("Start Server");
-        rightPanel.add(startServerButton, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(150, -1), new Dimension(150, -1), new Dimension(150, -1), 0, false));
         statusLabel = new JLabel();
         statusLabel.setText("Status: ");
-        rightPanel.add(statusLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        rightPanel.add(statusLabel, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         statusResultLabel = new JLabel();
         statusResultLabel.setText("STOP");
-        rightPanel.add(statusResultLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        rightPanel.add(statusResultLabel, new GridConstraints(0, 2, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        opPanel = new JPanel();
+        opPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        opPanel.setBackground(new Color(-1120293));
+        rightPanel.add(opPanel, new GridConstraints(1, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        startServerButton = new JButton();
+        startServerButton.setText("Start Server");
+        opPanel.add(startServerButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(150, -1), new Dimension(150, -1), new Dimension(150, -1), 0, false));
+        stopServerButton = new JButton();
+        stopServerButton.setText("Stop Server");
+        opPanel.add(stopServerButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(150, -1), new Dimension(150, -1), new Dimension(150, -1), 0, false));
         logPanel = new JPanel();
         logPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         logPanel.setBackground(new Color(-1120293));

@@ -1,7 +1,6 @@
 package me.n1ar4.fake.gui;
 
 public interface Constant {
-    String version = "0.1";
     String STOP = "STOP";
     String RUNNING = "RUNNING";
     String FakeServer = "FakeServer";

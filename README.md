@@ -73,7 +73,11 @@ message RPCPort {
 }
 ```
 
-## 0x05 免责申明
+## 0x05 其他
+
+
+
+## 0x06 免责申明
 
 本项目仅面向安全研究与学习，禁止任何非法用途
 
@@ -81,7 +85,7 @@ message RPCPort {
 
 除非您已充分阅读、完全理解并接受本协议，否则，请您不要使用本项目
 
-## 0x06 致谢与参考
+## 0x07 致谢与参考
 
 - https://github.com/frohoff/ysoserial
 - https://github.com/fnmsd/MySQL_Fake_Server

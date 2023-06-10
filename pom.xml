@@ -6,7 +6,7 @@
 
     <groupId>me.n1ar4</groupId>
     <artifactId>FakeServer</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -19,6 +19,7 @@
         <module>fake-mysql8-test</module>
         <module>fake-mysql-cli</module>
         <module>fake-mysql-rpc</module>
+        <module>fake-mysql-build</module>
     </modules>
 
     <properties>

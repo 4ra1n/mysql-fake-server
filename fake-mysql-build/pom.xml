@@ -9,20 +9,12 @@
         <version>0.0.2</version>
     </parent>
 
-    <artifactId>fake-mysql6-test</artifactId>
+    <artifactId>fake-mysql-build</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>6.0.2</version>
-        </dependency>
-    </dependencies>
 
 </project>
