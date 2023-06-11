@@ -15,7 +15,7 @@
 
 完全使用`Java`实现部分`MySQL`协议，内置常见`ysoserial`链，一键启动，自动生成可用的`payload`用于测试
 
-参考[MySQL_Fake_Server](https://github.com/fnmsd/MySQL_Fake_Server)项目，`payload`从`user`参数传递。反序列化应以`deser_`开头，规则为`deser_[gadget]_[cmd]`；文件读取以`fileread_`开头，规则为`fileread_[name]`
+参考 [MySQL_Fake_Server](https://github.com/fnmsd/MySQL_Fake_Server) 项目，`payload`从`user`参数传递。反序列化应以`deser_`开头，规则为`deser_[gadget]_[cmd]`；文件读取以`fileread_`开头，规则为`fileread_[name]`
 
 由于某些文件名或命令存在特殊字符，支持使用`base64`传递方式，方式为原有`user`基础上进行`base64`并以`base64`开头，例如`user=deser_CB_calc.exe`等于`user=base64ZGVzZXJfQ0JfY2FsYy5leGU=`
 
