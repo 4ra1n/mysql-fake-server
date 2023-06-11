@@ -219,7 +219,7 @@ public class FakeServer {
         });
         this.stopServerButton.addActionListener(e -> {
             MySQLServer.stop();
-            LogUtil.log("已停止服务器");
+            LogUtil.log("mysql fake server stopped");
             LogUtil.setT(null);
             new Thread(() -> {
                 try {
