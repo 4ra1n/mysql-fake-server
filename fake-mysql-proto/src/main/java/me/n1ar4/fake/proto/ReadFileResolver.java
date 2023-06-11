@@ -36,7 +36,15 @@ public class ReadFileResolver implements Resolver {
             if (sps.length < 2) {
                 return;
             }
-            String filename = sps[1];
+
+            StringBuilder builder = new StringBuilder();
+            for (int i = 1; i < sps.length; i++) {
+                builder.append(sps[i]);
+                if (i != sps.length - 1) {
+                    builder.append("_");
+                }
+            }
+            String filename = builder.toString();
 
             File file = new File(filename);
             String shortName = file.getName();

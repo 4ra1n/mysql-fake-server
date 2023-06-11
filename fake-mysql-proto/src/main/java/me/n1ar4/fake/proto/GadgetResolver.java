@@ -31,7 +31,15 @@ public class GadgetResolver implements Resolver {
                 return;
             }
             String gadget = sps[1];
-            String cmd = sps[2];
+
+            StringBuilder builder = new StringBuilder();
+            for (int i = 2; i < sps.length; i++) {
+                builder.append(sps[i]);
+                if (i != sps.length - 1) {
+                    builder.append("_");
+                }
+            }
+            String cmd = builder.toString();
 
             log.info("mode: deserialization");
             LogUtil.log("mode: deserialization");
