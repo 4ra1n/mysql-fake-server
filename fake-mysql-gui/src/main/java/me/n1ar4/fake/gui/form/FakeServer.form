@@ -178,7 +178,7 @@
         </properties>
         <border type="none" title="Payload Panel"/>
         <children>
-          <component id="5e7b5" class="javax.swing.JLabel" binding="generatetLabel">
+          <component id="5e7b5" class="javax.swing.JLabel" binding="generateLabel">
             <constraints>
               <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
             </constraints>

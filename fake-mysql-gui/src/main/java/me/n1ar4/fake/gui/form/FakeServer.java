@@ -53,7 +53,7 @@ public class FakeServer {
     private JLabel statusResultLabel;
     private JPanel gadgetPanel;
     private JPanel payloadPanel;
-    private JLabel generatetLabel;
+    private JLabel generateLabel;
     private JLabel addrLabel;
     private JLabel cmdFileLabel;
     private JTextField cmdFileText;
@@ -557,9 +557,9 @@ public class FakeServer {
         payloadPanel.setBackground(new Color(-1120293));
         masterPanel.add(payloadPanel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         payloadPanel.setBorder(BorderFactory.createTitledBorder(null, "Payload Panel", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-        generatetLabel = new JLabel();
-        generatetLabel.setText("Generate");
-        payloadPanel.add(generatetLabel, new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        generateLabel = new JLabel();
+        generateLabel.setText("Generate");
+        payloadPanel.add(generateLabel, new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         generateText = new JTextField();
         payloadPanel.add(generateText, new GridConstraints(9, 3, 1, 11, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         addrLabel = new JLabel();
