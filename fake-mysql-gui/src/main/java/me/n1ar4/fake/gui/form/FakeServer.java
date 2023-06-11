@@ -206,6 +206,7 @@ public class FakeServer {
         this.startServerButton.addActionListener(e -> {
             String ip = ipText.getText();
             String port = portText.getText();
+            MySQLServer.unsetStop();
             if (StringUtil.isNull(ip) || StringUtil.isNull(port)) {
                 TipUtil.error("ip or port is null");
                 return;

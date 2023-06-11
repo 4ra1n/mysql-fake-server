@@ -23,6 +23,10 @@ public class MySQLServer {
         isRunning = false;
     }
 
+    public static void unsetStop() {
+        isRunning = true;
+    }
+
     public static void setIp(String ip) {
         MySQLServer.ip = ip;
     }
