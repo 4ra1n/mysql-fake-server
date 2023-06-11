@@ -17,11 +17,13 @@ public class PrintUtil {
         System.out.println("\tGadget: CB|CC31|CC44|ROME|7U21|8U20|C3P0|URLDNS");
         System.out.println("\t\tExample 1: deser_CB_calc.exe");
         System.out.println("\t\tExample 2: deser_URLDNS_http://your-dns-log");
+
         System.out.println();
         System.out.println("Read file user: fileread_[name]");
         System.out.println("\t\tExample 1: fileread_/etc/passwd");
         System.out.println("\t\tExample 2: fileread_C:\\Program Files\\src.zip");
 
+        System.out.println();
         System.out.println("Support raw string and base64 (start with base64)");
         System.out.println("\t\tExample 1: user=deser_CB_calc.exe");
         System.out.println("\t\tExample 2: user=base64ZGVzZXJfQ0JfY2FsYy5leGU=");

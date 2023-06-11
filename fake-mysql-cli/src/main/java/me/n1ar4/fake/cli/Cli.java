@@ -10,6 +10,7 @@ public class Cli {
 
     public static void main(String[] args) {
         Cli main = new Cli();
+        System.setProperty("sun.stdout.encoding", "utf-8");
         JCommander.newBuilder()
                 .addObject(main)
                 .build()
@@ -19,7 +20,7 @@ public class Cli {
     }
 
     private void run() {
-        if(port == 0) {
+        if (port == 0) {
             port = 3308;
         }
         MySQLServer.setIp("0.0.0.0");
