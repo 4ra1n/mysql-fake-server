@@ -15,6 +15,12 @@
 
 完全使用`Java`实现部分`MySQL`协议，内置常见`ysoserial`链，一键启动，自动生成可用的`payload`用于测试
 
+参考[MySQL_Fake_Server](https://github.com/fnmsd/MySQL_Fake_Server)项目，`payload`从`user`参数传递。反序列化应以`deser_`开头，规则为`deser_[gadget]_[cmd]`；文件读取以`fileread_`开头，规则为`fileread_[name]`
+
+由于某些文件名或命令存在特殊字符，支持使用`base64`传递方式，方式为原有`user`基础上进行`base64`并以`base64`开头，例如`user=deser_CB_calc.exe`等于`user=base64ZGVzZXJfQ0JfY2FsYy5leGU=`
+
+默认文件保存在当前目录的`fake-server-files`下的当前时间戳目录内（自动创建目录）
+
 ## 0x01 GUI
 
 使用`GUI`版本一键启动，启动后可以根据自己的环境输入参数，生成`payload`
@@ -75,7 +81,18 @@ message RPCPort {
 
 ## 0x05 其他
 
+怎样测试：
 
+```java
+    String url = "jdbc:mysql://...";
+    try {
+        Class.forName("com.mysql.jdbc.Driver");
+        // Class.forName("com.mysql.cj.jdbc.Driver");
+        DriverManager.getConnection(url);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+```
 
 ## 0x06 免责申明
 
