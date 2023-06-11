@@ -21,6 +21,10 @@ public class PrintUtil {
         System.out.println("Read file user: fileread_[name]");
         System.out.println("\t\tExample 1: fileread_/etc/passwd");
         System.out.println("\t\tExample 2: fileread_C:\\Program Files\\src.zip");
+
+        System.out.println("Support raw string and base64 (start with base64)");
+        System.out.println("\t\tExample 1: user=deser_CB_calc.exe");
+        System.out.println("\t\tExample 2: user=base64ZGVzZXJfQ0JfY2FsYy5leGU=");
         System.out.println("\u001B[32;1m#################################################################\u001B[0m");
     }
 }

