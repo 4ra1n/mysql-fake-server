@@ -5,8 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Build {
-    static String oldVersion = "0.0.1";
-    static String newVersion = "0.0.2";
+    static String oldVersion = "0.0.2";
+    static String newVersion = "0.0.3";
 
     public static void main(String[] args) throws Exception {
         Path rootPom = Paths.get("pom.xml");

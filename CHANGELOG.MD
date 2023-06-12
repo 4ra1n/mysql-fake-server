@@ -19,3 +19,5 @@ init
 - Optimize the output in the command-line version and add HELP information.
 - Fix minor bugs related to non-core features.
 - Automatically check for new versions and prompt for updates.
+
+## 0.0.3

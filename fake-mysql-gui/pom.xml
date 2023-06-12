@@ -6,7 +6,7 @@
     <parent>
         <groupId>me.n1ar4</groupId>
         <artifactId>FakeServer</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
     </parent>
 
     <artifactId>fake-mysql-gui</artifactId>
@@ -31,13 +31,13 @@
         <dependency>
             <groupId>me.n1ar4</groupId>
             <artifactId>fake-mysql-log</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>me.n1ar4</groupId>
             <artifactId>fake-mysql-proto</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

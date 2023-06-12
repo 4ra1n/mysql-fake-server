@@ -6,7 +6,7 @@
     <parent>
         <groupId>me.n1ar4</groupId>
         <artifactId>FakeServer</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
     </parent>
 
     <artifactId>fake-mysql8-test</artifactId>
