@@ -20,6 +20,7 @@ public class Build {
         Path logPom = Paths.get("fake-mysql-log/pom.xml");
         Path protoPom = Paths.get("fake-mysql-proto/pom.xml");
         Path rpcPom = Paths.get("fake-mysql-rpc/pom.xml");
+        Path version = Paths.get("fake-mysql-proto/src/main/java/me/n1ar4/fake/proto/Version.java");
 
         replace(rootPom);
         replace(m5Pom);
@@ -32,6 +33,7 @@ public class Build {
         replace(logPom);
         replace(protoPom);
         replace(rpcPom);
+        replace(version);
     }
 
     private static void replace(Path path) throws Exception {
