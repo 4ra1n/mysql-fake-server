@@ -19,6 +19,8 @@ Due to the existence of special characters in some file names or commands, it is
 
 By default, the files are saved in the directory named after the current timestamp under the `fake-server-files` directory in the current directory (the directory is automatically created).
 
+Note: When reading files, if there is incomplete reading, try again to get a complete reading.
+
 ## 0x01 GUI
 
 Use the `GUI` version to start with one click. After starting, you can enter parameters according to your environment to generate a payload.
