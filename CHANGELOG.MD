@@ -13,13 +13,6 @@ init
 - 处理非主要功能的BUG
 - 自动检查新版本并提示更新
 
-- Fix the bug of handling payloads containing `_` characters.
-- Allow Base64 input for parameters to prevent special cases.
-- Fix the bug that occurs when restarting the GUI version.
-- Optimize the output in the command-line version and add HELP information.
-- Fix minor bugs related to non-core features.
-- Automatically check for new versions and prompt for updates.
-
 ## 0.0.3
 
 支持了自定义反序列化payload功能，内部仅保留最常见的链，其他情况自行导入
@@ -30,3 +23,7 @@ init
 - 修复了dockerfile版本问题
 - 删除了基本不会使用的rpc模块
 - 完善README信息
+
+## 0.0.4
+
+todo
