@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="masterPanel" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="1330" height="720"/>
+      <xy x="20" y="20" width="1330" height="804"/>
     </constraints>
     <properties>
       <background color="-1120293"/>
@@ -272,7 +272,7 @@
               <text value="File Read"/>
             </properties>
           </component>
-          <grid id="d5854" binding="gadgetPanel" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="d5854" binding="gadgetPanel" layout-manager="GridLayoutManager" row-count="4" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="1" column="0" row-span="2" col-span="17" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -284,7 +284,7 @@
             <children>
               <component id="434e9" class="javax.swing.JRadioButton" binding="jdk7Button">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-1120293"/>
@@ -293,7 +293,7 @@
               </component>
               <component id="e2a30" class="javax.swing.JRadioButton" binding="jdk8Button">
                 <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-1120293"/>
@@ -302,7 +302,7 @@
               </component>
               <component id="309ff" class="javax.swing.JRadioButton" binding="cc44Button">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-1120293"/>
@@ -311,7 +311,7 @@
               </component>
               <component id="5204a" class="javax.swing.JRadioButton" binding="urldnsButton">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-1120293"/>
@@ -320,7 +320,7 @@
               </component>
               <component id="b82e7" class="javax.swing.JRadioButton" binding="cbButton">
                 <constraints>
-                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-1120293"/>
@@ -329,7 +329,7 @@
               </component>
               <component id="f0320" class="javax.swing.JRadioButton" binding="cc31Button">
                 <constraints>
-                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-1120293"/>
@@ -338,7 +338,7 @@
               </component>
               <scrollpane id="33380" binding="scroll">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                  <grid row="2" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
                     <minimum-size width="-1" height="100"/>
                     <preferred-size width="-1" height="100"/>
                     <maximum-size width="-1" height="100"/>
@@ -349,34 +349,50 @@
                 <children>
                   <component id="d57ff" class="javax.swing.JTextArea" binding="gadgetArea">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <text value=""/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>
-              <component id="494de" class="javax.swing.JButton" binding="cleanButton" default-binding="true">
+              <grid id="6ea5f" binding="customPanel" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="0" row-span="1" col-span="4" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Clean"/>
+                  <background color="-1120294"/>
                 </properties>
-              </component>
-              <component id="62c8d" class="javax.swing.JButton" binding="applyButton">
-                <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Apply Gadget Data"/>
-                </properties>
-              </component>
-              <component id="57c92" class="javax.swing.JLabel" binding="gadgetDataLabel">
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Gadget Data (Base64)"/>
-                </properties>
-              </component>
+                <border type="none"/>
+                <children>
+                  <component id="62c8d" class="javax.swing.JButton" binding="applyButton">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Apply Gadget Data"/>
+                    </properties>
+                  </component>
+                  <component id="494de" class="javax.swing.JButton" binding="cleanButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Clean"/>
+                    </properties>
+                  </component>
+                  <component id="8955f" class="javax.swing.JRadioButton" binding="useCustomGadgetBase64RadioButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1120294"/>
+                      <enabled value="false"/>
+                      <text value="use custom gadget (base64 data)"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
             </children>
           </grid>
           <component id="af4da" class="javax.swing.JLabel" binding="typeLabel">
@@ -490,6 +506,7 @@
       <member id="1ffe4"/>
       <member id="f0320"/>
       <member id="3d08c"/>
+      <member id="8955f"/>
     </group>
     <group name="typeGroup">
       <member id="3f356"/>

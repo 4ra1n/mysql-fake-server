@@ -23,6 +23,10 @@
 
 注意：读文件功能遇到没有没有完整读取的情况，重新尝试即可完整读取
 
+自从 `0.0.3` 版本以后支持了自定义反序列化 `gadget` 功能
+
+![](img/004.png)
+
 ## 0x01 GUI
 
 使用`GUI`版本一键启动，启动后可以根据自己的环境输入参数，生成`payload`
@@ -46,40 +50,6 @@
 启动：`docker run -p 3306:3306 -d fake-mysql-server`
 
 ![](img/003.png)
-
-## 0x04 RPC
-
-本项目提供了`GRPC`调用的方式
-
-启动：`java -jar fake-mysql-rpc.jar`（默认启动端口9999）
-
-proto:
-
-```protobuf
-syntax = "proto3";
-
-option java_package = "me.n1ar4.fake.rpc";
-option java_outer_classname = "FakeServerRPC";
-option java_multiple_files = true;
-
-package me.n1ar4.fake.rpc;
-
-service RPCStart {
-  rpc start (RPCNull) returns (RPCResp) {}
-  rpc stop (RPCPort) returns(RPCResp) {}
-}
-
-message RPCNull{}
-
-message RPCResp {
-  string status = 1;
-  int32 port = 2;
-}
-
-message RPCPort {
-  int32 port = 1;
-}
-```
 
 ## 0x05 其他
 

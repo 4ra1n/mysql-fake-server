@@ -7,6 +7,7 @@ import me.n1ar4.fake.gui.util.PortUtil;
 import me.n1ar4.fake.gui.util.StringUtil;
 import me.n1ar4.fake.gui.util.TipUtil;
 import me.n1ar4.fake.log.LogUtil;
+import me.n1ar4.fake.proto.GadgetResolver;
 import me.n1ar4.fake.proto.MySQLServer;
 import me.n1ar4.fake.proto.Version;
 import okhttp3.*;
@@ -47,8 +48,6 @@ public class FakeServer {
     private JRadioButton cc31Button;
     private JRadioButton cc44Button;
     private JRadioButton urldnsButton;
-    private JRadioButton romeButton;
-    private JRadioButton c3p0Button;
     private JLabel statusLabel;
     private JLabel statusResultLabel;
     private JPanel gadgetPanel;
@@ -74,9 +73,11 @@ public class FakeServer {
     private JButton generateBase64Button;
     private JButton cleanButton;
     private JButton applyButton;
-    private JLabel gadgetDataLabel;
     private JTextArea gadgetArea;
     private JScrollPane scroll;
+    private JRadioButton useCustomGadgetBase64RadioButton;
+    private JPanel customPanel;
+    private static boolean useCustom = false;
 
     public static void start() {
         JFrame frame = new JFrame(Constant.FakeServer);
@@ -199,6 +200,7 @@ public class FakeServer {
 
     public FakeServer() {
         LogUtil.setT(this.logArea);
+        this.gadgetArea.setLineWrap(true);
         this.addrText.setText("ip:port");
         this.deserButton.setSelected(true);
         this.cbButton.setSelected(true);
@@ -273,16 +275,14 @@ public class FakeServer {
                 gadget = "deser_CC31";
             } else if (cc44Button.isSelected()) {
                 gadget = "deser_CC44";
-            } else if (romeButton.isSelected()) {
-                gadget = "deser_ROME";
             } else if (jdk7Button.isSelected()) {
                 gadget = "deser_JDK7U21";
             } else if (jdk8Button.isSelected()) {
                 gadget = "deser_JDK8U20";
-            } else if (c3p0Button.isSelected()) {
-                gadget = "deser_C3P0";
             } else if (urldnsButton.isSelected()) {
                 gadget = "deser_URLDNS";
+            } else if (useCustom) {
+                gadget = "deser_CUSTOM";
             } else {
                 TipUtil.error("gadget is null");
                 return;
@@ -293,11 +293,15 @@ public class FakeServer {
                 return;
             }
             String cmd = cmdFileText.getText();
-            if (StringUtil.isNull(cmd)) {
+            if (StringUtil.isNull(cmd) && !useCustom) {
                 TipUtil.error("cmd is null");
                 return;
             }
-            gadget = gadget + "_" + cmd.trim();
+
+            if (!useCustom) {
+                gadget = gadget + "_" + cmd.trim();
+            }
+
             String temp = null;
             if (serverStatusDiffInterceptorRadioButton.isSelected()) {
                 if (v5105118RadioButton.isSelected() ||
@@ -365,16 +369,14 @@ public class FakeServer {
                 gadget = "deser_CC31";
             } else if (cc44Button.isSelected()) {
                 gadget = "deser_CC44";
-            } else if (romeButton.isSelected()) {
-                gadget = "deser_ROME";
             } else if (jdk7Button.isSelected()) {
                 gadget = "deser_JDK7U21";
             } else if (jdk8Button.isSelected()) {
                 gadget = "deser_JDK8U20";
-            } else if (c3p0Button.isSelected()) {
-                gadget = "deser_C3P0";
             } else if (urldnsButton.isSelected()) {
                 gadget = "deser_URLDNS";
+            } else if (useCustom) {
+                gadget = "deser_CUSTOM";
             } else {
                 TipUtil.error("gadget is null");
                 return;
@@ -385,11 +387,13 @@ public class FakeServer {
                 return;
             }
             String cmd = cmdFileText.getText();
-            if (StringUtil.isNull(cmd)) {
+            if (StringUtil.isNull(cmd) && !useCustom) {
                 TipUtil.error("cmd is null");
                 return;
             }
-            gadget = gadget + "_" + cmd.trim();
+            if (!useCustom) {
+                gadget = gadget + "_" + cmd.trim();
+            }
             gadget = "base64" + Base64.getEncoder().encodeToString(gadget.getBytes());
             String temp = null;
             if (serverStatusDiffInterceptorRadioButton.isSelected()) {
@@ -437,6 +441,23 @@ public class FakeServer {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, null);
             TipUtil.info("copied!");
+        });
+        this.applyButton.addActionListener(e -> {
+            String text = gadgetArea.getText();
+            if (text == null || text.isEmpty()) {
+                JOptionPane.showMessageDialog(masterPanel, "gadget data is null");
+                return;
+            }
+            GadgetResolver.setCustomGadget(text);
+            useCustom = true;
+            useCustomGadgetBase64RadioButton.setSelected(true);
+            JOptionPane.showMessageDialog(masterPanel, "save ok");
+        });
+        this.cleanButton.addActionListener(e -> {
+            useCustom = false;
+            GadgetResolver.setCustomGadget(null);
+            cbButton.setSelected(true);
+            JOptionPane.showMessageDialog(masterPanel, "cancel custom gadget");
         });
         new Thread(() -> {
             OkHttpClient client = new OkHttpClient();
@@ -597,47 +618,54 @@ public class FakeServer {
         fileReadButton.setText("File Read");
         payloadPanel.add(fileReadButton, new GridConstraints(3, 4, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         gadgetPanel = new JPanel();
-        gadgetPanel.setLayout(new GridLayoutManager(4, 3, new Insets(0, 0, 0, 0), -1, -1));
+        gadgetPanel.setLayout(new GridLayoutManager(4, 4, new Insets(0, 0, 0, 0), -1, -1));
         gadgetPanel.setBackground(new Color(-1120293));
         payloadPanel.add(gadgetPanel, new GridConstraints(1, 0, 2, 17, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         gadgetPanel.setBorder(BorderFactory.createTitledBorder(null, "Gadget", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         jdk7Button = new JRadioButton();
         jdk7Button.setBackground(new Color(-1120293));
         jdk7Button.setText("JDK 7u21");
-        gadgetPanel.add(jdk7Button, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        gadgetPanel.add(jdk7Button, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         jdk8Button = new JRadioButton();
         jdk8Button.setBackground(new Color(-1120293));
         jdk8Button.setText("JDK 8u20");
-        gadgetPanel.add(jdk8Button, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        gadgetPanel.add(jdk8Button, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         cc44Button = new JRadioButton();
         cc44Button.setBackground(new Color(-1120293));
         cc44Button.setText("CC 4.4.0 (CC2)");
-        gadgetPanel.add(cc44Button, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        gadgetPanel.add(cc44Button, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         urldnsButton = new JRadioButton();
         urldnsButton.setBackground(new Color(-1120293));
         urldnsButton.setText("URLDNS");
-        gadgetPanel.add(urldnsButton, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        gadgetPanel.add(urldnsButton, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         cbButton = new JRadioButton();
         cbButton.setBackground(new Color(-1120293));
         cbButton.setText("CB 1.9");
-        gadgetPanel.add(cbButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        gadgetPanel.add(cbButton, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         cc31Button = new JRadioButton();
         cc31Button.setBackground(new Color(-1120293));
         cc31Button.setText("CC 3.1 (CC6)");
-        gadgetPanel.add(cc31Button, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        gadgetPanel.add(cc31Button, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         scroll = new JScrollPane();
-        gadgetPanel.add(scroll, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(-1, 100), new Dimension(-1, 100), new Dimension(-1, 100), 0, false));
+        gadgetPanel.add(scroll, new GridConstraints(2, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(-1, 100), new Dimension(-1, 100), new Dimension(-1, 100), 0, false));
         gadgetArea = new JTextArea();
+        gadgetArea.setText("");
         scroll.setViewportView(gadgetArea);
-        cleanButton = new JButton();
-        cleanButton.setText("Clean");
-        gadgetPanel.add(cleanButton, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        customPanel = new JPanel();
+        customPanel.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
+        customPanel.setBackground(new Color(-1120294));
+        gadgetPanel.add(customPanel, new GridConstraints(3, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         applyButton = new JButton();
         applyButton.setText("Apply Gadget Data");
-        gadgetPanel.add(applyButton, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        gadgetDataLabel = new JLabel();
-        gadgetDataLabel.setText("Gadget Data (Base64)");
-        gadgetPanel.add(gadgetDataLabel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        customPanel.add(applyButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        cleanButton = new JButton();
+        cleanButton.setText("Clean");
+        customPanel.add(cleanButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        useCustomGadgetBase64RadioButton = new JRadioButton();
+        useCustomGadgetBase64RadioButton.setBackground(new Color(-1120294));
+        useCustomGadgetBase64RadioButton.setEnabled(false);
+        useCustomGadgetBase64RadioButton.setText("use custom gadget (base64 data)");
+        customPanel.add(useCustomGadgetBase64RadioButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         typeLabel = new JLabel();
         typeLabel.setText("Type");
         payloadPanel.add(typeLabel, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
@@ -688,6 +716,7 @@ public class FakeServer {
         buttonGroup.add(urldnsButton);
         buttonGroup.add(cbButton);
         buttonGroup.add(cc31Button);
+        buttonGroup.add(useCustomGadgetBase64RadioButton);
         buttonGroup = new ButtonGroup();
         buttonGroup.add(detectCustomCollationsRadioButton);
         buttonGroup.add(serverStatusDiffInterceptorRadioButton);

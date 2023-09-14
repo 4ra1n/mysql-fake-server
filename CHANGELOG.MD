@@ -21,3 +21,12 @@ init
 - Automatically check for new versions and prompt for updates.
 
 ## 0.0.3
+
+支持了自定义反序列化payload功能，内部仅保留最常见的链，其他情况自行导入
+
+- 希望支持yso自定义 #3
+- 支持调用自己的yso #2
+- 命令行版本也支持了自定义序列化数据
+- 修复了dockerfile版本问题
+- 删除了基本不会使用的rpc模块
+- 完善README信息

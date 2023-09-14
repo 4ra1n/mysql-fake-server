@@ -21,6 +21,10 @@ By default, the files are saved in the directory named after the current timesta
 
 Note: When reading files, if there is incomplete reading, try again to get a complete reading.
 
+Since `0.0.3` version, we support use custom `gadget` function
+
+![](../img/004.png)
+
 ## 0x01 GUI
 
 Use the `GUI` version to start with one click. After starting, you can enter parameters according to your environment to generate a payload.
@@ -44,40 +48,6 @@ Build: `docker build -t fake-mysql-server .`
 Launch: `docker run -p 3306:3306 -d fake-mysql-server`
 
 ![](../img/003.png)
-
-## 0x04 RPC
-
-This project provides a `GRPC` call method.
-
-Launch: `java -jar fake-mysql-rpc.jar` (default launch port 9999)
-
-proto:
-
-```protobuf
-syntax = "proto3";
-
-option java_package = "me.n1ar4.fake.rpc";
-option java_outer_classname = "FakeServerRPC";
-option java_multiple_files = true;
-
-package me.n1ar4.fake.rpc;
-
-service RPCStart {
-  rpc start (RPCNull) returns (RPCResp) {}
-  rpc stop (RPCPort) returns(RPCResp) {}
-}
-
-message RPCNull{}
-
-message RPCResp {
-  string status = 1;
-  int32 port = 2;
-}
-
-message RPCPort {
-  int32 port = 1;
-}
-```
 
 ## 0x05 Others
 

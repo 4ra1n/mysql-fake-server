@@ -27,6 +27,12 @@ public class PrintUtil {
         System.out.println("Support raw string and base64 (start with base64)");
         System.out.println("\t\tExample 1: user=deser_CB_calc.exe");
         System.out.println("\t\tExample 2: user=base64ZGVzZXJfQ0JfY2FsYy5leGU=");
+
+        System.out.println();
+        System.out.println("Support custom gadget (use file)");
+        System.out.println("\t\tExample: save gadget to test.txt");
+        System.out.println("\t\tUse: java -jar cli.jar -f test.txt");
+        System.out.println("\t\tUse: deser_CUSTOM");
         System.out.println("\u001B[32;1m#################################################################\u001B[0m");
     }
 }
