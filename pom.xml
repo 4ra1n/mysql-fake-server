@@ -18,7 +18,6 @@
         <module>fake-mysql6-test</module>
         <module>fake-mysql8-test</module>
         <module>fake-mysql-cli</module>
-        <module>fake-mysql-rpc</module>
         <module>fake-mysql-build</module>
     </modules>
 
@@ -76,16 +75,5 @@
             <artifactId>commons-collections4</artifactId>
             <version>4.0</version>
         </dependency>
-        <dependency>
-            <groupId>rome</groupId>
-            <artifactId>rome</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>0.9.5.2</version>
-        </dependency>
     </dependencies>
-    <!-- gadget -->
 </project>

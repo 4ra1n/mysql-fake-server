@@ -19,7 +19,6 @@ public class Build {
         Path guiPom = Paths.get("fake-mysql-gui/pom.xml");
         Path logPom = Paths.get("fake-mysql-log/pom.xml");
         Path protoPom = Paths.get("fake-mysql-proto/pom.xml");
-        Path rpcPom = Paths.get("fake-mysql-rpc/pom.xml");
         Path version = Paths.get("fake-mysql-proto/src/main/java/me/n1ar4/fake/proto/Version.java");
 
         replace(rootPom);
@@ -32,7 +31,6 @@ public class Build {
         replace(guiPom);
         replace(logPom);
         replace(protoPom);
-        replace(rpcPom);
         replace(version);
     }
 

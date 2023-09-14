@@ -58,14 +58,14 @@ public class MySQLServer {
             }
             log.info("exit...");
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("start server error: {}", e.toString());
         }
         try {
             if (serverSocket != null) {
                 serverSocket.close();
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("start server error: {}", ex.toString());
         }
     }
 }
