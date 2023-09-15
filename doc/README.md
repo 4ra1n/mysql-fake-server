@@ -9,15 +9,22 @@
 
 This project is an advanced version of [MySQL_Fake_Server](https://github.com/fnmsd/MySQL_Fake_Server).
 
-When the `JDBC URL` is controllable, a special `MySQL` server can read any file or perform deserialization operations on the `JDBC` client.
+When the `JDBC URL` is controllable, a special `MySQL` server can read any file or perform deserialization operations on
+the `JDBC` client.
 
-The `MySQL` protocol is partially implemented entirely using `Java`, with built-in common `ysoserial` chains, one-click launch, and automatic generation of usable payloads for testing.
+The `MySQL` protocol is partially implemented entirely using `Java`, with built-in common `ysoserial` chains, one-click
+launch, and automatic generation of usable payloads for testing.
 
-Refer to the [MySQL_Fake_Server](https://github.com/fnmsd/MySQL_Fake_Server) project, the `payload` is transmitted from the `user` parameter. The deserialization operation should start with `deser_`, and the rule is `deser_[gadget]_[cmd]`. The file reading should start with `fileread_`, and the rule is `fileread_[name]`.
+Refer to the [MySQL_Fake_Server](https://github.com/fnmsd/MySQL_Fake_Server) project, the `payload` is transmitted from
+the `user` parameter. The deserialization operation should start with `deser_`, and the rule is `deser_[gadget]_[cmd]`.
+The file reading should start with `fileread_`, and the rule is `fileread_[name]`.
 
-Due to the existence of special characters in some file names or commands, it is possible to use the `base64` transmission method, which is based on the original `user` and followed by `base64` after `base64`, such as `user=deser_CB_calc.exe` is equal to `user=base64ZGVzZXJfQ0JfY2FsYy5leGU=`.
+Due to the existence of special characters in some file names or commands, it is possible to use the `base64`
+transmission method, which is based on the original `user` and followed by `base64` after `base64`, such
+as `user=deser_CB_calc.exe` is equal to `user=base64ZGVzZXJfQ0JfY2FsYy5leGU=`.
 
-By default, the files are saved in the directory named after the current timestamp under the `fake-server-files` directory in the current directory (the directory is automatically created).
+By default, the files are saved in the directory named after the current timestamp under the `fake-server-files`
+directory in the current directory (the directory is automatically created).
 
 Note: When reading files, if there is incomplete reading, try again to get a complete reading.
 
@@ -27,7 +34,8 @@ Since `0.0.3` version, we support use custom `gadget` function
 
 ## 0x01 GUI
 
-Use the `GUI` version to start with one click. After starting, you can enter parameters according to your environment to generate a payload.
+Use the `GUI` version to start with one click. After starting, you can enter parameters according to your environment to
+generate a payload.
 
 Launch: `java -jar fake-mysql-gui.jar`
 
@@ -35,7 +43,8 @@ Launch: `java -jar fake-mysql-gui.jar`
 
 ## 0x02 CLI
 
-When your environment does not allow the use of the `GUI` version, you can use the command line version to start, and also use the `GUI` to generate a payload.
+When your environment does not allow the use of the `GUI` version, you can use the command line version to start, and
+also use the `GUI` to generate a payload.
 
 Launch: `java -jar fake-mysql-cli.jar -p [port]`
 

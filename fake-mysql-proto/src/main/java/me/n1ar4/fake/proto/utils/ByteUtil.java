@@ -7,6 +7,7 @@ public class ByteUtil {
         byteArray[1] = (byte) ((value >> 8) & 0xFF);
         return byteArray;
     }
+
     public static byte[] int3ToBytes(int value) {
         byte[] bytes = new byte[3];
         bytes[0] = (byte) ((value >> 16) & 0xFF);
@@ -14,7 +15,8 @@ public class ByteUtil {
         bytes[2] = (byte) (value & 0xFF);
         return bytes;
     }
-    public static byte[] ReverseBytes(byte[] byteArray){
+
+    public static byte[] ReverseBytes(byte[] byteArray) {
         int left = 0;
         int right = byteArray.length - 1;
         while (left < right) {

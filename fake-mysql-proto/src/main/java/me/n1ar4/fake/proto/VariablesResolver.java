@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class VariablesResolver implements Resolver{
+public class VariablesResolver implements Resolver {
     private static final Logger log = LogManager.getLogger(VariablesResolver.class);
 
     private final OutputStream outputStream;

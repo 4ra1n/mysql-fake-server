@@ -15,7 +15,7 @@ public class ColumnPacket {
         return listToBytes(finalValues);
     }
 
-    public static byte[] buildColumnPacket(String column){
+    public static byte[] buildColumnPacket(String column) {
         byte[] def = strEncode("def".getBytes());
         List<Byte> packet = new ArrayList<>(bytesToList(def));
         packet.add((byte) 0x00);

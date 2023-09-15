@@ -4,7 +4,7 @@ import me.n1ar4.fake.log.LogUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,6 +19,10 @@ public class MySQLServer {
         return port;
     }
 
+    public static void setPort(int port) {
+        MySQLServer.port = port;
+    }
+
     public static void stop() {
         isRunning = false;
     }
@@ -29,10 +33,6 @@ public class MySQLServer {
 
     public static void setIp(String ip) {
         MySQLServer.ip = ip;
-    }
-
-    public static void setPort(int port) {
-        MySQLServer.port = port;
     }
 
     public static void main(String[] args) {

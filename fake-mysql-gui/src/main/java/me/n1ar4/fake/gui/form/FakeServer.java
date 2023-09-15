@@ -25,6 +25,7 @@ import java.net.URI;
 import java.util.Base64;
 
 public class FakeServer {
+    private static boolean useCustom = false;
     private JPanel masterPanel;
     private JPanel lefPanel;
     private JPanel rightPanel;
@@ -77,125 +78,12 @@ public class FakeServer {
     private JScrollPane scroll;
     private JRadioButton useCustomGadgetBase64RadioButton;
     private JPanel customPanel;
-    private static boolean useCustom = false;
 
-    public static void start() {
-        JFrame frame = new JFrame(Constant.FakeServer);
-        frame.setJMenuBar(createMenuBar());
-        frame.setResizable(false);
-        frame.setContentPane(new FakeServer().masterPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-    }
-
-    private static JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createAboutMenu());
-        menuBar.add(createVersionMenu());
-        return menuBar;
-    }
-
-    private static JMenu createAboutMenu() {
-        try {
-            JMenu aboutMenu = new JMenu("Help");
-            JMenuItem bugItem = new JMenuItem("Report Bug");
-            InputStream is = FakeServer.class.getClassLoader().getResourceAsStream("issue.png");
-            if (is == null) {
-                return null;
-            }
-            ImageIcon imageIcon = new ImageIcon(ImageIO.read(is));
-            bugItem.setIcon(imageIcon);
-            aboutMenu.add(bugItem);
-            bugItem.addActionListener(e -> {
-                try {
-                    Desktop desktop = Desktop.getDesktop();
-                    URI oURL = new URI("https://github.com/4ra1n/mysql-fake-server/issues");
-                    desktop.browse(oURL);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-
-            JMenuItem authorItem = new JMenuItem("Github");
-            is = FakeServer.class.getClassLoader().getResourceAsStream("address.png");
-            if (is == null) {
-                return null;
-            }
-            imageIcon = new ImageIcon(ImageIO.read(is));
-            authorItem.setIcon(imageIcon);
-            aboutMenu.add(authorItem);
-            authorItem.addActionListener(e -> {
-                try {
-                    Desktop desktop = Desktop.getDesktop();
-                    URI oURL = new URI("https://github.com/4ra1n/mysql-fake-server");
-                    desktop.browse(oURL);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-            return aboutMenu;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    private static JMenu createVersionMenu() {
-        try {
-            JMenu verMenu = new JMenu("Version");
-            JMenuItem jarItem = new JMenuItem("Current Version: " + Version.version);
-            InputStream is = FakeServer.class.getClassLoader().getResourceAsStream("ver.png");
-            if (is == null) {
-                return null;
-            }
-            ImageIcon imageIcon = new ImageIcon(ImageIO.read(is));
-            jarItem.setIcon(imageIcon);
-
-            JMenuItem downItem = new JMenuItem("Check Latest Version");
-            downItem.setIcon(imageIcon);
-            downItem.addActionListener(e -> {
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url("https://api.github.com/repos/4ra1n/mysql-fake-server/releases/latest")
-                        .addHeader("Connection", "close")
-                        .build();
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    @SuppressWarnings("all")
-                    public void onFailure(Call call, IOException e) {
-                        TipUtil.error(e.toString());
-                    }
-
-                    @Override
-                    @SuppressWarnings("all")
-                    public void onResponse(Call call, Response response) {
-                        try {
-                            if (response.body() == null) {
-                                TipUtil.error("network error");
-                            }
-                            String body = response.body().string();
-                            String ver = body.split("\"tag_name\":")[1].split(",")[0];
-                            ver = ver.substring(1, ver.length() - 1);
-
-                            String output;
-                            output = String.format("%s: %s\n%s: %s",
-                                    "Your Version", Version.version,
-                                    "Latest Version", ver);
-                            TipUtil.info(output);
-                        } catch (Exception ex) {
-                            TipUtil.error(ex.toString());
-                        }
-                    }
-                });
-            });
-
-            verMenu.add(jarItem);
-            verMenu.add(downItem);
-            return verMenu;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
+    {
+// GUI initializer generated by IntelliJ IDEA GUI Designer
+// >>> IMPORTANT!! <<<
+// DO NOT EDIT OR ADD ANY CODE HERE!
+        $$$setupUI$$$();
     }
 
     public FakeServer() {
@@ -504,11 +392,123 @@ public class FakeServer {
         }).start();
     }
 
-    {
-// GUI initializer generated by IntelliJ IDEA GUI Designer
-// >>> IMPORTANT!! <<<
-// DO NOT EDIT OR ADD ANY CODE HERE!
-        $$$setupUI$$$();
+    public static void start() {
+        JFrame frame = new JFrame(Constant.FakeServer);
+        frame.setJMenuBar(createMenuBar());
+        frame.setResizable(false);
+        frame.setContentPane(new FakeServer().masterPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    private static JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(createAboutMenu());
+        menuBar.add(createVersionMenu());
+        return menuBar;
+    }
+
+    private static JMenu createAboutMenu() {
+        try {
+            JMenu aboutMenu = new JMenu("Help");
+            JMenuItem bugItem = new JMenuItem("Report Bug");
+            InputStream is = FakeServer.class.getClassLoader().getResourceAsStream("issue.png");
+            if (is == null) {
+                return null;
+            }
+            ImageIcon imageIcon = new ImageIcon(ImageIO.read(is));
+            bugItem.setIcon(imageIcon);
+            aboutMenu.add(bugItem);
+            bugItem.addActionListener(e -> {
+                try {
+                    Desktop desktop = Desktop.getDesktop();
+                    URI oURL = new URI("https://github.com/4ra1n/mysql-fake-server/issues");
+                    desktop.browse(oURL);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
+
+            JMenuItem authorItem = new JMenuItem("Github");
+            is = FakeServer.class.getClassLoader().getResourceAsStream("address.png");
+            if (is == null) {
+                return null;
+            }
+            imageIcon = new ImageIcon(ImageIO.read(is));
+            authorItem.setIcon(imageIcon);
+            aboutMenu.add(authorItem);
+            authorItem.addActionListener(e -> {
+                try {
+                    Desktop desktop = Desktop.getDesktop();
+                    URI oURL = new URI("https://github.com/4ra1n/mysql-fake-server");
+                    desktop.browse(oURL);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
+            return aboutMenu;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    private static JMenu createVersionMenu() {
+        try {
+            JMenu verMenu = new JMenu("Version");
+            JMenuItem jarItem = new JMenuItem("Current Version: " + Version.version);
+            InputStream is = FakeServer.class.getClassLoader().getResourceAsStream("ver.png");
+            if (is == null) {
+                return null;
+            }
+            ImageIcon imageIcon = new ImageIcon(ImageIO.read(is));
+            jarItem.setIcon(imageIcon);
+
+            JMenuItem downItem = new JMenuItem("Check Latest Version");
+            downItem.setIcon(imageIcon);
+            downItem.addActionListener(e -> {
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url("https://api.github.com/repos/4ra1n/mysql-fake-server/releases/latest")
+                        .addHeader("Connection", "close")
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    @SuppressWarnings("all")
+                    public void onFailure(Call call, IOException e) {
+                        TipUtil.error(e.toString());
+                    }
+
+                    @Override
+                    @SuppressWarnings("all")
+                    public void onResponse(Call call, Response response) {
+                        try {
+                            if (response.body() == null) {
+                                TipUtil.error("network error");
+                            }
+                            String body = response.body().string();
+                            String ver = body.split("\"tag_name\":")[1].split(",")[0];
+                            ver = ver.substring(1, ver.length() - 1);
+
+                            String output;
+                            output = String.format("%s: %s\n%s: %s",
+                                    "Your Version", Version.version,
+                                    "Latest Version", ver);
+                            TipUtil.info(output);
+                        } catch (Exception ex) {
+                            TipUtil.error(ex.toString());
+                        }
+                    }
+                });
+            });
+
+            verMenu.add(jarItem);
+            verMenu.add(downItem);
+            return verMenu;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     /**

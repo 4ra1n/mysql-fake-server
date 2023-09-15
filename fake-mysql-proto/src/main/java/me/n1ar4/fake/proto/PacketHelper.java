@@ -18,7 +18,7 @@ public class PacketHelper {
             if (bytesRead != -1) {
                 return Arrays.copyOf(buffer, bytesRead);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("socket error");
         }
         return new byte[]{};
@@ -32,7 +32,7 @@ public class PacketHelper {
             }
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] lenHex = ByteUtil.ReverseBytes(ByteUtil.int3ToBytes(d.length));
-            byte[] numHex = ColumnPacket.hexToBytes(String.format("%02d",num));
+            byte[] numHex = ColumnPacket.hexToBytes(String.format("%02d", num));
             out.write(lenHex);
             out.write(numHex);
             out.write(d);

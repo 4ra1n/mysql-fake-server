@@ -1,11 +1,11 @@
 package me.n1ar4.fake.gadget;
 
+import sun.reflect.ReflectionFactory;
+
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-
-import sun.reflect.ReflectionFactory;
 
 @SuppressWarnings("unused")
 public class Reflections {

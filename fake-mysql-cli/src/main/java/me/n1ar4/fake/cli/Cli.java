@@ -12,7 +12,7 @@ public class Cli {
     @Parameter(names = {"-p", "--port"}, description = "port")
     private int port;
 
-    @Parameter(names = {"-f","--file"},description = "gadget file")
+    @Parameter(names = {"-f", "--file"}, description = "gadget file")
     private String customGadget;
 
     public static void main(String[] args) {
@@ -33,11 +33,11 @@ public class Cli {
         MySQLServer.setPort(port);
         PrintUtil.print();
 
-        if(customGadget!=null&&!customGadget.isEmpty()){
+        if (customGadget != null && !customGadget.isEmpty()) {
             try {
                 GadgetResolver.setCustomGadget(new String(Files.readAllBytes(Paths.get(customGadget))));
                 System.out.println("set custom gadget finish");
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
