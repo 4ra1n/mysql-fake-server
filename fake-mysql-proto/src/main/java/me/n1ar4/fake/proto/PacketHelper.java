@@ -1,7 +1,6 @@
 package me.n1ar4.fake.proto;
 
 import me.n1ar4.fake.proto.utils.ByteUtil;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,7 +32,7 @@ public class PacketHelper {
             }
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] lenHex = ByteUtil.ReverseBytes(ByteUtil.int3ToBytes(d.length));
-            byte[] numHex = Hex.decodeHex(String.format("%02d",num));
+            byte[] numHex = ColumnPacket.hexToBytes(String.format("%02d",num));
             out.write(lenHex);
             out.write(numHex);
             out.write(d);

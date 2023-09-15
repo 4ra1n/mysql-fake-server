@@ -7,24 +7,11 @@ import java.lang.reflect.InvocationTargetException;
 
 import sun.reflect.ReflectionFactory;
 
-import com.nqzero.permit.Permit;
-
-@SuppressWarnings("restriction")
+@SuppressWarnings("unused")
 public class Reflections {
 
     public static void setAccessible(AccessibleObject member) {
-        String versionStr = System.getProperty("java.version");
-        int javaVersion = Integer.parseInt(versionStr.split("\\.")[0]);
-        if (javaVersion < 12) {
-            // quiet runtime warnings from JDK9+
-            Permit.setAccessible(member);
-        } else {
-            // not possible to quiet runtime warnings anymore...
-            // see https://bugs.openjdk.java.net/browse/JDK-8210522
-            // to understand impact on Permit (i.e. it does not work
-            // anymore with Java >= 12)
-            member.setAccessible(true);
-        }
+        member.setAccessible(true);
     }
 
     public static Field getField(final Class<?> clazz, final String fieldName) {
