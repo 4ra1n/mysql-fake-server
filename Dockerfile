@@ -14,7 +14,7 @@ FROM openjdk:8-jre
 
 LABEL MAINTAINER="4ra1n"
 
-COPY --from=builder /usr/src/fake-mysql-cli-0.0.3.jar /cli.jar
+COPY --from=builder /usr/src/fake-mysql-cli-0.0.4.jar /cli.jar
 
 EXPOSE 3306
 
