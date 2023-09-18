@@ -36,6 +36,12 @@
             <artifactId>fake-mysql-proto</artifactId>
             <version>0.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>me.n1ar4</groupId>
+            <artifactId>pgsql-xml-server</artifactId>
+            <version>0.0.4</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

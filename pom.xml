@@ -19,6 +19,8 @@
         <module>fake-mysql8-test</module>
         <module>fake-mysql-cli</module>
         <module>fake-mysql-build</module>
+        <module>pgsql-xml-server</module>
+        <module>pgsql-rce-test</module>
     </modules>
 
     <properties>

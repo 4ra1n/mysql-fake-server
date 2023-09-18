@@ -6,6 +6,6 @@ public class StringUtil {
             return true;
         }
         s = s.trim();
-        return s.equals("");
+        return s.isEmpty();
     }
 }
