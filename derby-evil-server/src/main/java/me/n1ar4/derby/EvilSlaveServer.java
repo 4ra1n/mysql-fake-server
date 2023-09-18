@@ -10,11 +10,13 @@ import java.util.Base64;
 public class EvilSlaveServer {
     private static int thePort;
     private static volatile boolean stopFlag = false;
-    public static void stop(){
+
+    public static void stop() {
         stopFlag = true;
     }
+
     @SuppressWarnings("all")
-    public static void start(String host,int port,String baseData) throws Exception {
+    public static void start(String host, int port, String baseData) throws Exception {
         stopFlag = false;
         thePort = port;
         byte[] data = Base64.getDecoder().decode(baseData);
@@ -22,7 +24,7 @@ public class EvilSlaveServer {
         InetSocketAddress address = new InetSocketAddress("0.0.0.0", port);
         server.bind(address);
         while (true) {
-            if(stopFlag){
+            if (stopFlag) {
                 LogUtil.log("derby receive exit signal");
                 break;
             }

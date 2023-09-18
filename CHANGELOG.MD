@@ -26,6 +26,13 @@ init
 
 ## 0.0.4
 
+支持了两种JDBC的利用：`PgSQL`和`Apache Derby`
+
 - 重要更新：支持了PgSQL RCE的利用Server
 - 重要更新：支持了Apache Derby利用Slave功能的RCE
 - 优化依赖减小体积，使用更标准的Maven插件打包配置
+- 修复了某些情况下日志输出的问题
+- 恢复日志模式到INFO级别避免打印过多无意义信息
+- 对UI做了一些小改善
+
+## 0.0.5
