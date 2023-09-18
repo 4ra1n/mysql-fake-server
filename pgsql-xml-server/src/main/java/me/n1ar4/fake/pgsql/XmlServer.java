@@ -16,7 +16,7 @@ public class XmlServer {
     }
 
     @SuppressWarnings("all")
-    public static void start(String host ,int port, String targetOS, String cmd, String path) throws IOException {
+    public static void start(String host, int port, String targetOS, String cmd, String path) throws IOException {
         stopFlag = false;
         InetAddress inetAddress = InetAddress.getByName(host);
         server = HttpServer.create(new InetSocketAddress(inetAddress, port), 0);
@@ -35,7 +35,7 @@ public class XmlServer {
                 }
             }
         }).start();
-        LogUtil.log("server started on port 8886");
+        LogUtil.log("server started on port " + port);
         server.start();
     }
 }

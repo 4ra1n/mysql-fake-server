@@ -21,6 +21,8 @@
         <module>fake-mysql-build</module>
         <module>pgsql-xml-server</module>
         <module>pgsql-rce-test</module>
+        <module>derby-rce-test</module>
+        <module>derby-evil-server</module>
     </modules>
 
     <properties>
