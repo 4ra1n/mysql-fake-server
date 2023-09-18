@@ -32,6 +32,15 @@ Since `0.0.3` version, we support use custom `gadget` function
 
 ![](../img/004.png)
 
+Since `0.0.4` version support `PostgreSQL RCE`
+
+![](../img/005.png)
+ 
+Since `0.0.4` version support `Apache Derby Slave` RCE
+
+![](../img/006.png)
+
+
 ## 0x01 GUI
 
 Use the `GUI` version to start with one click. After starting, you can enter parameters according to your environment to

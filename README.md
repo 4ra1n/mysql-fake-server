@@ -29,6 +29,15 @@
 
 ![](img/004.png)
 
+自从 `0.0.4` 版本以后支持了 `PostgreSQL RCE`
+
+![](img/005.png)
+
+自从 `0.0.4` 版本以后支持了 `Apache Derby` 基于 `Slave` 的 RCE
+
+![](img/006.png)
+
+
 ## 0x01 GUI
 
 使用`GUI`版本一键启动，启动后可以根据自己的环境输入参数，生成`payload`

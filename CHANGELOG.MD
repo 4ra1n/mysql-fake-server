@@ -27,4 +27,5 @@ init
 ## 0.0.4
 
 - 重要更新：支持了PgSQL RCE的利用Server
+- 重要更新：支持了Apache Derby利用Slave功能的RCE
 - 优化依赖减小体积，使用更标准的Maven插件打包配置
